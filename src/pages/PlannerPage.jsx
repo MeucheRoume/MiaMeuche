@@ -1,0 +1,86 @@
+import { useState, useEffect } from "react";
+import { generateWeekPlan } from "../services/planner";
+import { Link } from "react-router-dom";
+
+const defaultPlanner = {
+  monday:    { lunch: null, dinner: null },
+  tuesday:   { lunch: null, dinner: null },
+  wednesday: { lunch: null, dinner: null },
+  thursday:  { lunch: null, dinner: null },
+  friday:    { lunch: null, dinner: null },
+  saturday:  { lunch: null, dinner: null },
+  sunday:    { lunch: null, dinner: null },
+};
+
+export default function PlannerPage() {
+  const [planner, setPlanner] = useState(() => {
+    const saved = localStorage.getItem("planner");
+    return saved ? JSON.parse(saved) : defaultPlanner;
+  });
+
+  const [recipes, setRecipes] = useState(() => {
+    const saved = localStorage.getItem("recipes");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("planner", JSON.stringify(planner));
+  }, [planner]);
+
+  const days = Object.keys(planner);
+
+  function autoPlan() {
+    const newPlanner = generateWeekPlan(recipes);
+    setPlanner(newPlanner);
+  }
+
+  function resetPlanner() {
+    setPlanner(defaultPlanner);
+  }
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl mb-4">🗓️ Planning de la semaine</h1>
+
+      <div className="flex gap-2 mb-4">
+        <button onClick={autoPlan} className="bg-green-600 text-white px-3 py-1 rounded">
+          Générer automatiquement
+        </button>
+        <button onClick={resetPlanner} className="bg-gray-400 text-white px-3 py-1 rounded">
+          Réinitialiser
+        </button>
+      </div>
+
+      <table className="w-full border-collapse">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border p-2">Jour</th>
+            <th className="border p-2">Déjeuner</th>
+            <th className="border p-2">Dîner</th>
+          </tr>
+        </thead>
+        <tbody>
+          {days.map(day => (
+            <tr key={day}>
+              <td className="border p-2 font-semibold capitalize">{day}</td>
+              <td className="border p-2">
+                {planner[day].lunch ? (
+                  <Link to={`/recipe/${planner[day].lunch.id}`} className="text-blue-600 underline">
+                    {planner[day].lunch.name}
+                  </Link>
+                ) : "—"}
+              </td>
+              <td className="border p-2">
+                {planner[day].dinner ? (
+                  <Link to={`/recipe/${planner[day].dinner.id}`} className="text-blue-600 underline">
+                    {planner[day].dinner.name}
+                  </Link>
+                ) : "—"}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
