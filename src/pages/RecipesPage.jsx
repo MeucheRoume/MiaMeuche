@@ -1,9 +1,6 @@
 import RecipeCard from "../components/RecipeCard";
-import { useRecipes } from "../hooks/useRecipes";
 
-export default function RecipesPage() {
-  const { recipes } = useRecipes();
-
+export default function RecipesPage({ recipes }) {
   return (
     <div className="p-4">
       <h1>🍲 Mes recettes</h1>
