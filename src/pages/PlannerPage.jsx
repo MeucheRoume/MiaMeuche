@@ -1,42 +1,9 @@
-import { useState, useEffect } from "react";
-import { generateWeekPlan } from "../services/planner";
 import { Link } from "react-router-dom";
+import { usePlanner } from "../hooks/usePlanner";
 
-const defaultPlanner = {
-  monday:    { lunch: null, dinner: null },
-  tuesday:   { lunch: null, dinner: null },
-  wednesday: { lunch: null, dinner: null },
-  thursday:  { lunch: null, dinner: null },
-  friday:    { lunch: null, dinner: null },
-  saturday:  { lunch: null, dinner: null },
-  sunday:    { lunch: null, dinner: null },
-};
-
-export default function PlannerPage() {
-  const [planner, setPlanner] = useState(() => {
-    const saved = localStorage.getItem("planner");
-    return saved ? JSON.parse(saved) : defaultPlanner;
-  });
-
-  const [recipes, setRecipes] = useState(() => {
-    const saved = localStorage.getItem("recipes");
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  useEffect(() => {
-    localStorage.setItem("planner", JSON.stringify(planner));
-  }, [planner]);
-
+export default function PlannerPage({ recipes }) {
+  const { planner, autoPlan, resetPlanner } = usePlanner(recipes);
   const days = Object.keys(planner);
-
-  function autoPlan() {
-    const newPlanner = generateWeekPlan(recipes);
-    setPlanner(newPlanner);
-  }
-
-  function resetPlanner() {
-    setPlanner(defaultPlanner);
-  }
 
   return (
     <div className="p-4">

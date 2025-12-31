@@ -1,16 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
 
-export default function RecipeDetailPage() {
-  const { id } = useParams(); // Récupère l'id depuis l'URL
-  const [recipe, setRecipe] = useState(null);
+export default function RecipeDetailPage({ recipes }) {
+  const { id } = useParams();
 
-  useEffect(() => {
-    // Récupérer la liste des recettes depuis localStorage
-    const savedRecipes = JSON.parse(localStorage.getItem("recipes") || "[]");
-    const found = savedRecipes.find(r => r.id === Number(id));
-    setRecipe(found || null);
-  }, [id]);
+  const recipe = recipes.find(r => r.id === Number(id));
 
   if (!recipe) return <p>Recette introuvable.</p>;
 

@@ -2,7 +2,11 @@ import {recipes as defaultRecipes} from '../data/recipes';
 
 export function loadRecipes() {
   const saved = localStorage.getItem('recipes');
-  return saved ? JSON.parse(saved) : defaultRecipes;
+
+  if (!saved) return defaultRecipes;
+
+  const parsed = JSON.parse(saved);
+  return parsed.length ? parsed : defaultRecipes;
 }
 
 export function saveRecipes(recipes) {

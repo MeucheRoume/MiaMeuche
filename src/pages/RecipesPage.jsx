@@ -1,16 +1,11 @@
-import { useState, useEffect } from "react";
 import RecipeCard from "../components/RecipeCard";
-import { loadRecipes, saveRecipes } from "../services/storage";
+import { useRecipes } from "../hooks/useRecipes";
 
 export default function RecipesPage() {
-  const [recipes, setRecipes] = useState(loadRecipes);
-
-  useEffect(() => {
-    saveRecipes(recipes);
-  }, [recipes]);
+  const { recipes } = useRecipes();
 
   return (
-    <div>
+    <div className="p-4">
       <h1>🍲 Mes recettes</h1>
       {recipes.map(recipe => (
         <RecipeCard key={recipe.id} recipe={recipe} />
