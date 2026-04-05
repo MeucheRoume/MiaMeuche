@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 
 import {loadRecipes, saveRecipes} from '../services/storage';
+import {recipes as defaultRecipes} from '../data/recipes';
 
 export function useRecipes() {
   // state initialisé avec les recettes du storage
@@ -30,5 +31,10 @@ export function useRecipes() {
     setRecipes(prev => prev.filter(r => r.id !== id));
   }
 
-  return {recipes, addRecipe, updateRecipe, removeRecipe, setRecipes};
+  // réinitialiser aux recettes par défaut
+  function resetRecipes() {
+    setRecipes(defaultRecipes);
+  }
+
+  return {recipes, addRecipe, updateRecipe, removeRecipe, resetRecipes, setRecipes};
 }

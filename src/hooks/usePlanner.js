@@ -4,8 +4,12 @@ import {defaultPlanner, generateWeekPlan} from '../services/planner';
 
 export function usePlanner(recipes) {
   const [planner, setPlanner] = useState(() => {
-    const saved = localStorage.getItem('planner');
-    return saved ? JSON.parse(saved) : defaultPlanner;
+    try {
+      const saved = localStorage.getItem('planner');
+      return saved ? JSON.parse(saved) : defaultPlanner;
+    } catch {
+      return defaultPlanner;
+    }
   });
 
   useEffect(() => {
@@ -17,7 +21,7 @@ export function usePlanner(recipes) {
   }
 
   function resetPlanner() {
-    setPlanner(defaultPlanner);
+    setPlanner(JSON.parse(JSON.stringify(defaultPlanner)));
   }
 
   return {planner, autoPlan, resetPlanner, setPlanner};

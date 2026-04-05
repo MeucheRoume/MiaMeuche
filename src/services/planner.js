@@ -8,14 +8,33 @@ export const defaultPlanner = {
   sunday: {lunch: null, dinner: null},
 };
 
-export function generateWeekPlan(recipes) {
-  const days = Object.keys(defaultPlanner);
-  const newPlanner = {};
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
+export function generateWeekPlan(recipes) {
+  if (!recipes.length) return { ...defaultPlanner };
+
+  const days = Object.keys(defaultPlanner);
+  const slots = days.length * 2; // lunch + dinner per day
+
+  // Repeat the shuffled pool until we have enough slots
+  let pool = [];
+  while (pool.length < slots) {
+    pool = [...pool, ...shuffle(recipes)];
+  }
+
+  const newPlanner = {};
+  let idx = 0;
   days.forEach(day => {
     newPlanner[day] = {
-      lunch: recipes[Math.floor(Math.random() * recipes.length)] || null,
-      dinner: recipes[Math.floor(Math.random() * recipes.length)] || null,
+      lunch: pool[idx++],
+      dinner: pool[idx++],
     };
   });
 

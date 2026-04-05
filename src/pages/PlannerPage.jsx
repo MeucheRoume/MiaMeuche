@@ -10,10 +10,10 @@ export default function PlannerPage({ recipes }) {
       <h1 className="text-2xl mb-4">🗓️ Planning de la semaine</h1>
 
       <div className="flex gap-2 mb-4">
-        <button onClick={autoPlan} className="bg-green-600 text-white px-3 py-1 rounded">
+        <button type="button" onClick={autoPlan} className="bg-green-600 text-white px-3 py-1 rounded">
           Générer automatiquement
         </button>
-        <button onClick={resetPlanner} className="bg-gray-400 text-white px-3 py-1 rounded">
+        <button type="button" onClick={resetPlanner} className="bg-gray-400 text-white px-3 py-1 rounded">
           Réinitialiser
         </button>
       </div>
@@ -32,14 +32,14 @@ export default function PlannerPage({ recipes }) {
               <td className="border p-2 font-semibold capitalize">{day}</td>
               <td className="border p-2">
                 {planner[day].lunch ? (
-                  <Link to={`/recipe/${planner[day].lunch.id}`} className="text-blue-600 underline">
+                  <Link to={`/recipe/${planner[day].lunch.id}`} className="hover:underline">
                     {planner[day].lunch.name}
                   </Link>
                 ) : "—"}
               </td>
               <td className="border p-2">
                 {planner[day].dinner ? (
-                  <Link to={`/recipe/${planner[day].dinner.id}`} className="text-blue-600 underline">
+                  <Link to={`/recipe/${planner[day].dinner.id}`} className="hover:underline">
                     {planner[day].dinner.name}
                   </Link>
                 ) : "—"}
